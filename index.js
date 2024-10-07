@@ -4,7 +4,7 @@ require("dotenv").config()
 const express = require("express")
 const app = express()
 const cors = require('cors')
-app.use(cors({origin:'http://127.0.0.1:5173'}))
+app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 const mongoUrl = `mongodb+srv://sndsatya:QtAy7QbfwCnzUhvu@clustersnd.adfao0n.mongodb.net/`
