@@ -1,14 +1,33 @@
 /* eslint-disable no-undef */
 
+require("dotenv").config()
 const express = require("express")
 const app = express()
 const cors = require('cors')
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-const mongoUrl = `mongodb+srv://sndsatya:QtAy7QbfwCnzUhvu@clustersnd.adfao0n.mongodb.net/`
+const path=require("path")
+//const mongoUrl = `mongodb+srv://sndsatya:QtAy7QbfwCnzUhvu@clustersnd.adfao0n.mongodb.net/`
+const mongoUrl = `mongodb://127.0.0.1:27017/`
 const Port = 3001
 const mongoClient = require('mongodb').MongoClient
+
+//Multer......................
+const multer=require("multer")
+const storage=multer.diskStorage({
+    destination: function (req,file,cb){
+        return cb(null,"./uploads")
+    },
+    filename:function(req,file,cb){
+        return cb(null,`${Date.now()}_${file.originalname}`)
+    }
+})
+
+
+const upload=multer({storage})
+
+///multer...................................
 
 //get users................................................
 app.get('/users', (req, res) => {
@@ -32,6 +51,11 @@ app.get('/chats/:id/:id2', (req, res) => {
     })
 })
 
+//images..............
+app.get("/uploads/:id",(req,res)=>{
+  res.sendFile(path.resolve("uploads/"+req.params.id))
+})
+
 //get group chats
 app.get('/groupchats/:id', (req, res) => {
     mongoClient.connect(mongoUrl).then(clientObject => {
@@ -47,6 +71,7 @@ app.post('/addgroupchat', (req, res) => {
     mongoClient.connect(mongoUrl).then(clientObject => {
         var database = clientObject.db('chatapp');
         database.collection('groupchats').insertOne(req.body);
+        res.send(req.body)
         res.end();
     })
 })
@@ -56,9 +81,16 @@ app.post('/addchat', (req, res) => {
     mongoClient.connect(mongoUrl).then(clientObject => {
         var database = clientObject.db('chatapp');
         database.collection('chats').insertOne(req.body);
+        res.send(req.body)
         res.end();
     })
 })
+//postImgChat....................
+
+app.post("/upload", upload.single("file"),(req,res)=>{
+    res.send(req.file.filename)
+})
+
 
 //signup
 app.post('/signup', (req, res) => {
