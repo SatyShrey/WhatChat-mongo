@@ -8,8 +8,8 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 const path=require("path")
-//const mongoUrl = `mongodb+srv://sndsatya:QtAy7QbfwCnzUhvu@clustersnd.adfao0n.mongodb.net/`
-const mongoUrl = `mongodb://127.0.0.1:27017/`
+const mongoUrl = `mongodb+srv://sndsatya:QtAy7QbfwCnzUhvu@clustersnd.adfao0n.mongodb.net/`
+//const mongoUrl = `mongodb://127.0.0.1:27017/`
 const Port = 3001
 const mongoClient = require('mongodb').MongoClient
 
